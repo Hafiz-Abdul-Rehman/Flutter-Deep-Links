@@ -36,7 +36,7 @@ Follow these steps to get this deep linking example up and running on your local
 2.  **Install Dependencies:**
 
     ```bash
-    flutter pub get
+    flutter pub add app_links get
     ```
 
 3.  **Platform Setup:**
@@ -92,111 +92,4 @@ Follow these steps to get this deep linking example up and running on your local
 
 ## Code Highlights
 
-The main logic for handling deep links typically resides in your `main.dart` file or a dedicated service class. You'll likely use the `uri_links` package (or similar) to listen for incoming deep link events.
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:uni_links/uni_links.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  String? _latestLink;
-
-  @override
-  void initState() {
-    super.initState();
-    _initUniLinks();
-  }
-
-  Future<void> _initUniLinks() async {
-    // Handle initial link if the app was launched with a deep link
-    final initialLink = await getInitialLink();
-    if (initialLink != null) {
-      setState(() {
-        _latestLink = initialLink;
-      });
-      _handleDeepLink(Uri.parse(initialLink));
-    }
-
-    // Listen for subsequent deep link events
-    linkStream.listen((String? link) {
-      if (link != null) {
-        setState(() {
-          _latestLink = link;
-        });
-        _handleDeepLink(Uri.parse(link));
-      }
-    }, onError: (err) {
-      print('Error receiving URI: $err');
-    });
-  }
-
-  void _handleDeepLink(Uri uri) {
-    // Example of handling different paths and parameters
-    if (uri.pathSegments.contains('profile')) {
-      String? userId = uri.queryParameters['id'];
-      if (userId != null) {
-        // Navigate to the user's profile page with the given ID
-        print('Navigating to profile with ID: $userId');
-        // Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileScreen(userId: userId)));
-      }
-    } else if (uri.pathSegments.contains('product')) {
-      String? productId = uri.queryParameters['id'];
-      if (productId != null) {
-        // Navigate to the product details page
-        print('Navigating to product with ID: $productId');
-        // Navigator.push(context, MaterialPageRoute(builder: (_) => ProductScreen(productId: productId)));
-      } else {
-        // Navigate to the general products page
-        print('Navigating to products page');
-        // Navigator.push(context, MaterialPageRoute(builder: (_) => ProductsScreen()));
-      }
-    } else {
-      // Handle other deep links or navigate to the home screen
-      print('Received unknown deep link: $uri');
-      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Deep Linking Demo',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Deep Linking Demo'),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'Latest Deep Link:',
-                style: TextStyle(fontSize: 16),
-              ),
-              Text(
-                _latestLink ?? 'No deep link received yet.',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Try opening the app via a deep link!',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-```
+The main logic for handling deep links typically resides in your `app_link_service.dart` file and the implementation is in `main.dart` file. You'll likely use the `app_links` package (or similar) to listen for incoming deep link events.
