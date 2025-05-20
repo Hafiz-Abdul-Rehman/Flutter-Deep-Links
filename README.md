@@ -30,7 +30,7 @@ Follow these steps to get this deep linking example up and running on your local
 
     ```bash
     git clone https://github.com/Hafiz-Abdul-Rehman/Flutter-Deep-Links.git
-    cd YOUR_REPOSITORY_NAME
+    cd Flutter-Deep-Links
     ```
 
 2.  **Install Dependencies:**
